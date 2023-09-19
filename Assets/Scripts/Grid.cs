@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Grid : MonoBehaviour
 {
-    //public Transform player;
+    public Transform seeker0;
+    public Transform target0;
     public LayerMask UnwalkableMask;
     public Vector2 GridWorldSize;
     public float NodeRadius;    // ver quanto de espaço cada node vai ter
@@ -18,6 +19,10 @@ public class Grid : MonoBehaviour
         nodeDiameter = NodeRadius * 2;
         gridSizeX = Mathf.RoundToInt(GridWorldSize.x / nodeDiameter);
         gridSizeY = Mathf.RoundToInt(GridWorldSize.y / nodeDiameter);
+    }
+
+    private void Update()
+    {
         CalculateGrid();
     }
 
@@ -82,7 +87,8 @@ public class Grid : MonoBehaviour
 
         if (grid != null)
         {
-            //Node playerNode = NodeFromWorldPoint(player.position);
+            Node seekerNode = NodeFromWorldPoint(seeker0.position);
+            Node targetNode = NodeFromWorldPoint(target0.position);
             foreach (Node node in grid)
             {
                 
@@ -92,10 +98,9 @@ public class Grid : MonoBehaviour
                 {
                     if (path.Contains(node)) { Gizmos.color = Color.black; }
                 }
-                //if (playerNode == node) // se o player estiver neste node específico, pinta de azul
-                //{
-                //    Gizmos.color = Color.cyan;
-                //}
+                if (seekerNode == node) { Gizmos.color = Color.cyan; } // se o player estiver neste node específico, pinta de azul
+
+                if (targetNode == node) { Gizmos.color = Color.green; }
                 Gizmos.DrawCube(node.WorldPosition, Vector3.one * (nodeDiameter - .1f));
             }
         }

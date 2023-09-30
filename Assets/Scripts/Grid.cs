@@ -11,6 +11,8 @@ public class Grid : MonoBehaviour
     public float NodeRadius;    // ver quanto de espaço cada node vai ter
     Node[,] grid;
 
+    public Vector3 pos;
+
     float nodeDiameter;
     int gridSizeX, gridSizeY;
 
@@ -81,8 +83,10 @@ public class Grid : MonoBehaviour
     }
 
     public List<Node> path;
+    public List<Node> vizinhos;
     private void OnDrawGizmos()
     {
+        pos = transform.position;
         Gizmos.DrawWireCube(transform.position, new Vector3(GridWorldSize.x, 1, GridWorldSize.y));
 
         if (grid != null)
@@ -93,16 +97,24 @@ public class Grid : MonoBehaviour
             {
                 
                 Gizmos.color = (node.walkable)? Color.white : Color.red;
-
+                //if (node.isVizinho) { Gizmos.color = Color.yellow; }
                 if (path != null)
                 {
-                    if (path.Contains(node)) { Gizmos.color = Color.black; }
+                    if (vizinhos.Contains(node)) { Gizmos.color = Color.yellow; }
+                    if (path.Contains(node)) 
+                    {
+                        //node.isVizinho = false;
+                        Gizmos.color = Color.black; 
+                    }
+                    
                 }
                 if (seekerNode == node) { Gizmos.color = Color.cyan; } // se o player estiver neste node específico, pinta de azul
 
                 if (targetNode == node) { Gizmos.color = Color.green; }
+
                 Gizmos.DrawCube(node.WorldPosition, Vector3.one * (nodeDiameter - .1f));
             }
         }
     }
+
 }

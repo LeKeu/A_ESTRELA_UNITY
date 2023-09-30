@@ -18,6 +18,8 @@ public class PathFinding : MonoBehaviour
     }
     void FindPath(Vector3 startPos, Vector3 endPos)
     {
+        List<Node> vizinhos = new List<Node>();
+
         Node startNode = grid.NodeFromWorldPoint(startPos);
         Node targetNode = grid.NodeFromWorldPoint(endPos);
 
@@ -28,7 +30,7 @@ public class PathFinding : MonoBehaviour
         while (openSet.Count > 0)
         {
             Node currentNode = openSet[0];
-            for (int i = 1; i < openSet.Count; i++)
+            for (int i = 1; i < openSet.Count; i++) // aqui, a gente roda todo open set p achar o node com o menor f cost
             {
                 if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost)
                 {
@@ -55,10 +57,14 @@ public class PathFinding : MonoBehaviour
                     vizinho.hCost = GetDistance(vizinho, targetNode);
                     vizinho.parent = currentNode;
 
+                    vizinhos.Add(vizinho);
+
                     if (!(openSet.Contains(vizinho))) { openSet.Add(vizinho); }
                 }
 
             }
+
+            grid.vizinhos = vizinhos;
 
         }
     }

@@ -14,6 +14,7 @@ public class Node
     public int gridY;
 
     public Node parent;
+    public bool isVizinho = true;
 
     public Node(bool _walkable, Vector3 _worldPos, int _gridX, int _gridY)
     {

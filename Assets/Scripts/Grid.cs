@@ -147,7 +147,7 @@ public class Grid : MonoBehaviour
                     }
                 }
 
-                List<string> costList = new List<string>() { "Fcost: "+node.fCost.ToString(), "Gcost: " + node.gCost.ToString(), "Hcost: " + node.hCost.ToString() };
+                List<string> costList = new List<string>() { node.fCost.ToString(), node.gCost.ToString(), node.hCost.ToString() };
 
                 for (int i = 1; i < aux; i++)
                 {

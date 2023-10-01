@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Grid : MonoBehaviour
 {
@@ -11,21 +14,32 @@ public class Grid : MonoBehaviour
     public float NodeRadius;    // ver quanto de espaço cada node vai ter
     Node[,] grid;
 
+    [SerializeField] Canvas canvas;
+
     public Vector3 pos;
 
     float nodeDiameter;
     int gridSizeX, gridSizeY;
+
+    [SerializeField] DragObject PdragObject;
+    [SerializeField] DragObject TdragObject;
 
     private void Start()
     {   // começar calculando, a partir do espaço do node e tamanho do grid, quandos nodes cabem nesse grid
         nodeDiameter = NodeRadius * 2;
         gridSizeX = Mathf.RoundToInt(GridWorldSize.x / nodeDiameter);
         gridSizeY = Mathf.RoundToInt(GridWorldSize.y / nodeDiameter);
+
+        CalculateGrid();
+        DesenharGrid();
     }
 
     private void Update()
     {
+        //DesenharGrid();
         CalculateGrid();
+
+
     }
 
     void CalculateGrid()
@@ -84,37 +98,55 @@ public class Grid : MonoBehaviour
 
     public List<Node> path;
     public List<Node> vizinhos;
-    private void OnDrawGizmos()
+
+    public void DesenharGrid()
     {
-        pos = transform.position;
-        Gizmos.DrawWireCube(transform.position, new Vector3(GridWorldSize.x, 1, GridWorldSize.y));
+
+        GameObject[] gos = GameObject.FindGameObjectsWithTag("Area");
+        if (gos != null)
+        {
+            foreach (GameObject go in gos)
+                Destroy(go);
+        }
 
         if (grid != null)
         {
             Node seekerNode = NodeFromWorldPoint(seeker0.position);
             Node targetNode = NodeFromWorldPoint(target0.position);
+
             foreach (Node node in grid)
             {
-                
-                Gizmos.color = (node.walkable)? Color.white : Color.red;
-                //if (node.isVizinho) { Gizmos.color = Color.yellow; }
+                Canvas c = Instantiate(canvas, node.WorldPosition, Quaternion.Euler(90, 0, 0));
+                c.GetComponentInChildren<Image>().color = (node.walkable) ? Color.white : Color.red;
+                //c.GetComponent<RectTransform>().localScale = new Vector3(nodeDiameter/10, nodeDiameter / 10, nodeDiameter / 10);
+                //c.transform.localScale = new Vector3(nodeDiameter / 10, nodeDiameter / 10, nodeDiameter / 10);
+
                 if (path != null)
                 {
-                    if (vizinhos.Contains(node)) { Gizmos.color = Color.yellow; }
-                    if (path.Contains(node)) 
+                    //Debug.Log("primeiro");
+                    if (vizinhos.Contains(node)) { c.GetComponentInChildren<Image>().color = Color.yellow; }
+                    if (path.Contains(node))
                     {
-                        //node.isVizinho = false;
-                        Gizmos.color = Color.black; 
+                        Debug.Log("preto");
+                        c.GetComponentInChildren<Image>().color = Color.black;
+                        //Instantiate(canvas, transform.position, Quaternion.identity);
                     }
-                    
+
                 }
-                if (seekerNode == node) { Gizmos.color = Color.cyan; } // se o player estiver neste node específico, pinta de azul
+                if (seekerNode == node) { c.GetComponentInChildren<Image>().color = Color.cyan; } // se o player estiver neste node específico, pinta de azul
 
-                if (targetNode == node) { Gizmos.color = Color.green; }
+                if (targetNode == node) { c.GetComponentInChildren<Image>().color = Color.green; }
 
-                Gizmos.DrawCube(node.WorldPosition, Vector3.one * (nodeDiameter - .1f));
+                int aux = c.transform.childCount;
+                List<string> costList = new List<string>() { node.fCost.ToString(), node.gCost.ToString(), node.hCost.ToString() };
+
+                for (int i = 1; i < aux; i++)
+                {
+                    c.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text = costList[i - 1];
+                }
             }
         }
     }
+
 
 }

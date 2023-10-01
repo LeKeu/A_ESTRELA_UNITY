@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Movable
   - Obstacle
+  - Area
   layers:
   - Default
   - TransparentFX

@@ -117,28 +117,37 @@ public class Grid : MonoBehaviour
             foreach (Node node in grid)
             {
                 Canvas c = Instantiate(canvas, node.WorldPosition, Quaternion.Euler(90, 0, 0));
+                int aux = c.transform.childCount;
                 c.GetComponentInChildren<Image>().color = (node.walkable) ? Color.white : Color.red;
+
                 //c.GetComponent<RectTransform>().localScale = new Vector3(nodeDiameter/10, nodeDiameter / 10, nodeDiameter / 10);
                 //c.transform.localScale = new Vector3(nodeDiameter / 10, nodeDiameter / 10, nodeDiameter / 10);
 
                 if (path != null)
                 {
-                    //Debug.Log("primeiro");
                     if (vizinhos.Contains(node)) { c.GetComponentInChildren<Image>().color = Color.yellow; }
                     if (path.Contains(node))
                     {
-                        Debug.Log("preto");
                         c.GetComponentInChildren<Image>().color = Color.black;
-                        //Instantiate(canvas, transform.position, Quaternion.identity);
+                        for (int i = 1; i < aux; i++)
+                        {
+                            c.transform.GetChild(i).GetComponent<TextMeshProUGUI>().color = Color.white;
+                        }
                     }
 
                 }
                 if (seekerNode == node) { c.GetComponentInChildren<Image>().color = Color.cyan; } // se o player estiver neste node específico, pinta de azul
 
-                if (targetNode == node) { c.GetComponentInChildren<Image>().color = Color.green; }
+                if (targetNode == node) 
+                { 
+                    c.GetComponentInChildren<Image>().color = Color.green;
+                    for (int i = 1; i < aux; i++)
+                    {
+                        c.transform.GetChild(i).GetComponent<TextMeshProUGUI>().color = Color.black;
+                    }
+                }
 
-                int aux = c.transform.childCount;
-                List<string> costList = new List<string>() { node.fCost.ToString(), node.gCost.ToString(), node.hCost.ToString() };
+                List<string> costList = new List<string>() { "Fcost: "+node.fCost.ToString(), "Gcost: " + node.gCost.ToString(), "Hcost: " + node.hCost.ToString() };
 
                 for (int i = 1; i < aux; i++)
                 {

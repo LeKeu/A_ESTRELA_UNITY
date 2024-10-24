@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -101,7 +100,6 @@ public class Grid : MonoBehaviour
 
     public void DesenharGrid()
     {
-
         GameObject[] gos = GameObject.FindGameObjectsWithTag("Area");
         if (gos != null)
         {

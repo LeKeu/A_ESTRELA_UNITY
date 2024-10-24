@@ -14,6 +14,11 @@ public class DragObject : MonoBehaviour
 
     public bool isMoving = false;
 
+    //private void Update()
+    //{
+    //    grid.DesenharGrid();
+    //}
+
     void OnMouseUp()
     {
         grid.DesenharGrid();

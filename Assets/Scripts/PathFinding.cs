@@ -16,6 +16,7 @@ public class PathFinding : MonoBehaviour
     {
         FindPath(seeker.position, target.position);
     }
+
     void FindPath(Vector3 startPos, Vector3 endPos)
     {
         List<Node> vizinhos = new List<Node>();
